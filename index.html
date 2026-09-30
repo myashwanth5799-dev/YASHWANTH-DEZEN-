@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dezen ALP - Health Companion</title>
+
+<style>
+:root{
+  --bg:#f4fbff;
+  --card:#ffffff;
+  --primary:#5b8def;
+  --primary2:#8db8ff;
+  --mint:#73d6c3;
+  --purple:#a99cf5;
+  --pink:#f5a8c7;
+  --text:#24334b;
+  --muted:#7d8da5;
+  --danger:#ef6f79;
+  --shadow:0 10px 35px rgba(70,110,160,.10);
+  --radius:24px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 5%,#e4f4ff 0,transparent 28%),
+    radial-gradient(circle at 90% 20%,#eeeaff 0,transparent 25%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input,textarea,select{font:inherit}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:250px;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(20px);
+  border-right:1px solid #e7eff8;
+  padding:25px 16px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:30;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 10px 28px;
+}
+
+.logo-icon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#78aaff,#79dcca);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:25px;
+  box-shadow:0 8px 20px rgba(91,141,239,.22);
+}
+
+.logo h1{
+  font-size:22px;
+}
+
+.logo span{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.nav button{
+  text-align:left;
+  background:transparent;
+  padding:13px 15px;
+  border-radius:15px;
+  color:#71819a;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#edf5ff;
+  color:#4e7edc;
+}
+
+.nav button span{
+  margin-right:10px;
+}
+
+.sidebar-bottom{
+  position:absolute;
+  bottom:25px;
+  left:18px;
+  right:18px;
+}
+
+/* MAIN */
+.main{
+  margin-left:250px;
+  width:calc(100% - 250px);
+  padding:25px 32px 100px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:25px;
+}
+
+.welcome small{
+  color:var(--muted);
+}
+
+.welcome h2{
+  font-size:27px;
+  margin-top:4px;
+}
+
+.top-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.icon-btn{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:white;
+  box-shadow:var(--shadow);
+  color:#6680a5;
+}
+
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#c4ddff,#d8f6ee);
+  display:grid;
+  place-items:center;
+  font-weight:700;
+  color:#5279b7;
+}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* HERO */
+.hero{
+  border-radius:30px;
+  padding:30px;
+  min-height:230px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,255,255,.8),transparent 20%),
+    linear-gradient(120deg,#dff2ff,#e7eaff 50%,#e5faf5);
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  right:-80px;
+  bottom:-100px;
+  background:rgba(255,255,255,.4);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:600px;
+}
+
+.hero h2{
+  font-size:30px;
+  margin-bottom:9px;
+}
+
+.hero p{
+  color:#667892;
+  line-height:1.6;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.primary{
+  background:linear-gradient(135deg,#6496f0,#75cfc2);
+  color:white;
+  padding:12px 18px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(91,141,239,.2);
+}
+
+.secondary{
+  background:white;
+  color:#5d7597;
+  padding:12px 18px;
+  border-radius:14px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  gap:18px;
+  margin-top:20px;
+}
+
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+
+.card{
+  background:rgba(255,255,255,.9);
+  border:1px solid #edf2f8;
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.card-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.card-title h3{
+  font-size:16px;
+}
+
+.card-title small{
+  color:var(--muted);
+}
+
+.health-card{
+  min-height:135px;
+}
+
+.health-icon{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  margin-bottom:12px;
+}
+
+.blue{background:#e7f1ff;color:#5e91ed}
+.green{background:#e4faf5;color:#54bda9}
+.purple{background:#efecff;color:#8173db}
+.pink{background:#fff0f5;color:#df7fa3}
+.orange{background:#fff4e7;color:#e59b4e}
+
+.metric{
+  font-size:25px;
+  font-weight:700;
+}
+
+.unit{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* LIST */
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.list-item{
+  padding:13px;
+  background:#f8fbff;
+  border-radius:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.list-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--mint);
+}
+
+.badge{
+  background:#edf5ff;
+  color:#5c86ca;
+  padding:6px 9px;
+  border-radius:9px;
+  font-size:11px;
+}
+
+.delete{
+  color:#e88995;
+  background:transparent;
+}
+
+/* ALP */
+.alp{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#6799f5,#73d7c2);
+  color:white;
+  box-shadow:
+    0 12px 35px rgba(91,141,239,.35),
+    0 0 0 8px rgba(255,255,255,.75);
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  animation:pulse 2.4s infinite;
+}
+
+.alp small{
+  font-size:9px;
+  opacity:.9;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+}
+
+.alp-panel{
+  position:fixed;
+  right:30px;
+  bottom:125px;
+  width:350px;
+  background:white;
+  border-radius:25px;
+  box-shadow:0 20px 60px rgba(40,70,110,.2);
+  z-index:99;
+  display:none;
+  overflow:hidden;
+}
+
+.alp-panel.show{display:block}
+
+.alp-head{
+  padding:17px 20px;
+  background:linear-gradient(135deg,#e9f4ff,#e8faf6);
+  display:flex;
+  justify-content:space-between;
+}
+
+.alp-chat{
+  height:270px;
+  padding:15px;
+  overflow:auto;
+}
+
+.message{
+  padding:10px 13px;
+  border-radius:15px;
+  max-width:85%;
+  margin-bottom:10px;
+  font-size:13px;
+}
+
+.alp-message{
+  background:#edf5ff;
+}
+
+.user-message{
+  background:#e6f8f2;
+  margin-left:auto;
+}
+
+.alp-input{
+  display:flex;
+  padding:12px;
+  gap:7px;
+  border-top:1px solid #edf1f6;
+}
+
+.alp-input input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:#f5f8fc;
+  padding:11px;
+  border-radius:12px;
+}
+
+/* FORMS */
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  color:#72829a;
+  margin-bottom:6px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid #e5edf5;
+  background:#f9fbfe;
+  padding:12px;
+  border-radius:13px;
+  outline:none;
+  color:var(--text);
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.full{grid-column:1/-1}
+
+/* MAP */
+.map{
+  height:300px;
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  background:
+    linear-gradient(30deg,transparent 47%,#d4e4ee 48%,#d4e4ee 50%,transparent 51%),
+    linear-gradient(120deg,transparent 47%,#dce9ef 48%,#dce9ef 50%,transparent 51%),
+    #edf6f7;
+  background-size:80px 80px;
+}
+
+.road{
+  position:absolute;
+  background:#fff;
+  transform:rotate(-25deg);
+  width:120%;
+  height:24px;
+  top:45%;
+  left:-10%;
+  box-shadow:0 0 3px #ccd9df;
+}
+
+.location-pin{
+  position:absolute;
+  left:52%;
+  top:42%;
+  width:45px;
+  height:45px;
+  background:#6a98ee;
+  border-radius:50% 50% 50% 5px;
+  transform:rotate(-45deg);
+  box-shadow:0 8px 18px rgba(80,120,220,.3);
+}
+
+.location-pin:after{
+  content:"";
+  width:14px;
+  height:14px;
+  background:white;
+  position:absolute;
+  border-radius:50%;
+  left:15px;
+  top:15px;
+}
+
+/* CHAT */
+.chat-box{
+  height:400px;
+  overflow:auto;
+  padding:20px;
+  background:#f7fbff;
+  border-radius:18px;
+}
+
+.chat-input{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+.chat-input input{
+  flex:1;
+  padding:13px;
+  border-radius:14px;
+  border:1px solid #e4edf5;
+}
+
+/* EMERGENCY */
+.emergency{
+  background:linear-gradient(135deg,#fff1f3,#fff9fa);
+  border:1px solid #ffdce1;
+}
+
+.emergency-button{
+  background:#ef737d;
+  color:white;
+  width:100%;
+  padding:15px;
+  border-radius:15px;
+  font-weight:700;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:30px;
+  transform:translateX(-50%) translateY(100px);
+  background:#24334b;
+  color:white;
+  padding:13px 18px;
+  border-radius:14px;
+  z-index:200;
+  transition:.3s;
+}
+
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+}
+
+/* MOBILE */
+.mobile-menu{
+  display:none;
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.3s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+    padding:18px;
+  }
+
+  .mobile-menu{
+    display:block;
+    width:44px;
+    height:44px;
+    background:white;
+    border-radius:13px;
+    box-shadow:var(--shadow);
+  }
+
+  .grid-4,.grid-3{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .hero h2{font-size:24px}
+}
+
+@media(max-width:600px){
+  .grid-4,.grid-3,.grid-2,.form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .topbar{
+    gap:10px;
+  }
+
+  .welcome h2{
+    font-size:21px;
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+  .alp{
+    right:18px;
+    bottom:18px;
+    width:70px;
+    height:70px;
+  }
+
+  .alp-panel{
+    left:15px;
+    right:15px;
+    width:auto;
+    bottom:100px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">✚</div>
+    <div>
+      <h1>Dezen ALP</h1>
+      <span>Your health companion</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="active" onclick="showPage('home',this)">🏠 <span>Home</span></button>
+    <button onclick="showPage('profile',this)">👤 <span>My Profile</span></button>
+    <button onclick="showPage('talk',this)">💬 <span>Health Talk</span></button>
+    <button onclick="showPage('appointments',this)">📅 <span>Appointments</span></button>
+    <button onclick="showPage('tracking',this)">❤️ <span>Health Tracking</span></button>
+    <button onclick="showPage('medicines',this)">💊 <span>Medicines</span></button>
+    <button onclick="showPage('reports',this)">📁 <span>Health Locker</span></button>
+    <button onclick="showPage('routine',this)">🌸 <span>Periods &amp; Routine</span></button>
+    <button onclick="showPage('emergency',this)">🚨 <span>Emergency</span></button>
+    <button onclick="showPage('location',this)">📍 <span>Nearby Hospitals</span></button>
+    <button onclick="showPage('settings',this)">⚙️ <span>Settings</span></button>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <small style="color:#98a5b8">ALP is ready to help 24/7</small>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <div style="display:flex;gap:12px;align-items:center">
+      <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+      <div class="welcome">
+        <small id="dateText">Tuesday, September 29</small>
+        <h2>Hello, <span id="userName">dee</span> 👋</h2>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn" onclick="showToast('No new notifications')">🔔</button>
+      <div class="avatar" id="avatar">D</div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section class="page active" id="home">
+
+    <div class="hero">
+      <div class="hero-content">
+        <h2>Your health. One simple place.</h2>
+        <p>
+          Meet <b>ALP</b>, your personal health companion. Track your health,
+          manage medicines, appointments and daily routines from one place.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="primary" onclick="openALP()">🎙 Talk to ALP</button>
+          <button class="secondary" onclick="showPage('tracking')">View Health</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-4">
+
+      <div class="card health-card">
+        <div class="health-icon blue">❤️</div>
+        <small>Heart Rate</small>
+        <div class="metric">76 <span class="unit">BPM</span></div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon purple">🩺</div>
+        <small>Blood Pressure</small>
+        <div class="metric">120/80</div>
+        <span class="unit">mmHg</span>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon green">⚖️</div>
+        <small>Weight</small>
+        <div class="metric">68 <span class="unit">kg</span></div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon orange">🌡️</div>
+        <small>Temperature</small>
+        <div class="metric">36.7 <span class="unit">°C</span></div>
+      </div>
+
+    </div>
+
+    <div class="grid grid-3">
+
+      <div class="card">
+        <div class="card-title">
+          <h3>💊 Medicine Reminder</h3>
+          <small>Today</small>
+        </div>
+
+        <div class="list">
+          <div class="list-item">
+            <div class="list-left">
+              <div class="dot"></div>
+              <div>
+                <b>Vitamin D</b><br>
+                <small>Morning · 8:00 AM</small>
+              </div>
+            </div>
+            <span class="badge">8:00 AM</span>
+          </div>
+
+          <div class="list-item">
+            <div class="list-left">
+              <div class="dot" style="background:#a99cf5"></div>
+              <div>
+                <b>Medicine</b><br>
+                <small>Night · 9:00 PM</small>
+              </div>
+            </div>
+            <span class="badge">9:00 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h3>📅 Next Appointment</h3>
+          <small>Upcoming</small>
+        </div>
+
+        <h3>Dr. Health Care</h3>
+        <p style="color:#7d8da5;margin-top:5px">General Consultation</p>
+
+        <div style="margin-top:15px;padding:12px;background:#eef6ff;border-radius:14px">
+          🗓 Tomorrow · 10:30 AM
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h3>🌸 Today's Routine</h3>
+          <small>Daily</small>
+        </div>
+
+        <div class="list">
+          <div class="list-item">
+            <span>💧 Drink water</span>
+            <input type="checkbox" onchange="showToast('Routine updated')">
+          </div>
+          <div class="list-item">
+            <span>🚶 Walking</span>
+            <input type="checkbox" onchange="showToast('Routine updated')">
+          </div>
+          <div class="list-item">
+            <span>😴 Sleep routine</span>
+            <input type="checkbox" onchange="showToast('Routine updated')">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="grid grid-2">
+
+      <div class="card">
+        <div class="card-title">
+          <h3>📝 Daily Notes</h3>
+          <button class="secondary" onclick="saveNote()">Save</button>
+        </div>
+
+        <textarea id="dailyNote" style="width:100%;height:120px;border:1px solid #e5edf5;border-radius:15px;padding:13px;resize:none" placeholder="Write how you feel today..."></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h3>🚶 Activity</h3>
+          <small>Today</small>
+        </div>
+
+        <div style="font-size:32px;font-weight:700">6,842</div>
+        <small style="color:#7d8da5">steps</small>
+
+        <div style="height:10px;background:#edf3f9;border-radius:10px;margin-top:18px">
+          <div style="width:68%;height:100%;background:linear-gradient(90deg,#72a5f5,#72d3c2);border-radius:10px"></div>
+        </div>
+
+        <p style="margin-top:10px;color:#7d8da5">68% of your daily goal</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PROFILE -->
+  <section class="page" id="profile">
+
+    <div class="card">
+      <div class="card-title">
+        <div>
+          <h2>👤 My Health Profile</h2>
+          <small>One personal profile</small>
+        </div>
+        <button class="primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Full Name</label>
+          <input id="profileName" placeholder="Your name" value="dee">
+        </div>
+
+        <div class="field">
+          <label>Age</label>
+          <input id="profileAge" type="number" placeholder="Age">
+        </div>
+
+        <div class="field">
+          <label>Gender</label>
+          <select id="profileGender">
+            <option selected="selected">Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+            <option>Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Blood Group</label>
+          <select id="bloodGroup">
+            <option selected="selected">Select</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Allergies</label>
+          <input id="allergies" placeholder="Food, medicine or other allergies">
+        </div>
+
+        <div class="field full">
+          <label>Existing Diseases / Conditions</label>
+          <textarea id="conditions" placeholder="Enter known conditions"></textarea>
+        </div>
+
+        <div class="field full">
+          <label>Current Medicines</label>
+          <textarea id="currentMedicines" placeholder="Medicine names and dosage"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Emergency Contact</label>
+          <input id="emergencyContact" placeholder="Name and phone number">
+        </div>
+
+        <div class="field">
+          <label>Family Member</label>
+          <input id="familyMember" placeholder="Family member name and phone">
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- HEALTH TALK -->
+  <section class="page" id="talk">
+
+    <div class="grid grid-3">
+
+      <div class="card">
+        <div class="health-icon blue">💬</div>
+        <h3>Health Chat</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Talk with ALP about your health questions.
+        </p>
+        <button class="primary" onclick="openALP()">Start Chat</button>
+      </div>
+
+      <div class="card">
+        <div class="health-icon green">🎙</div>
+        <h3>Voice Consultation</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Speak naturally with ALP.
+        </p>
+        <button class="primary" onclick="startVoice()">🎙 Speak</button>
+      </div>
+
+      <div class="card">
+        <div class="health-icon purple">📹</div>
+        <h3>Video Consultation</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Connect with a healthcare professional.
+        </p>
+        <button class="primary" onclick="showToast('Video consultation module ready')">
+          Start Video
+        </button>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">
+        <h3>💬 ALP Health Conversation</h3>
+        <span class="badge">Online</span>
+      </div>
+
+      <div class="chat-box" id="bigChat">
+        <div class="message alp-message">
+          Hello! I'm ALP. How are you feeling today?
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Type your message...">
+        <button class="primary" onclick="sendChat()">Send</button>
+        <button class="secondary" onclick="startVoice()">🎙</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- APPOINTMENTS -->
+  <section class="page" id="appointments">
+
+    <div class="card">
+      <div class="card-title">
+        <div>
+          <h2>📅 Appointments</h2>
+          <small>Manage your healthcare schedule</small>
+        </div>
+        <button class="primary" onclick="addAppointment()">+ Add Appointment</button>
+      </div>
+
+      <div class="list" id="appointmentList">
+
+        <div class="list-item">
+          <div>
+            <b>General Consultation</b>
+            <br><small>Dr. Health Care · City Clinic</small>
+          </div>
+          <span class="badge">Tomorrow · 10:30 AM</span>
+        </div>
+
+        <div class="list-item">
+          <div>
+            <b>Blood Test</b>
+            <br><small>City Diagnostic Centre</small>
+          </div>
+          <span class="badge">Friday · 8:00 AM</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TRACKING -->
+  <section class="page" id="tracking">
+
+    <div class="grid grid-4">
+
+      <div class="card health-card">
+        <div class="health-icon blue">❤️</div>
+        <small>Heart Rate</small>
+        <div class="metric">76 BPM</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon purple">🩺</div>
+        <small>Blood Pressure</small>
+        <div class="metric">120/80</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon orange">🌡️</div>
+        <small>Temperature</small>
+        <div class="metric">36.7°C</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon green">⚖️</div>
+        <small>BMI</small>
+        <div class="metric">22.4</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon pink">⚖️</div>
+        <small>Weight</small>
+        <div class="metric">68 kg</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon purple">😴</div>
+        <small>Sleep</small>
+        <div class="metric">7h 20m</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon green">🚶</div>
+        <small>Steps</small>
+        <div class="metric">6,842</div>
+      </div>
+
+      <div class="card health-card">
+        <div class="health-icon pink">📝</div>
+        <small>Symptoms</small>
+        <div class="metric">2</div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">
+        <h3>Add Health Reading</h3>
+        <small>Manual tracking</small>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Heart Rate</label>
+          <input type="number" placeholder="BPM">
+        </div>
+
+        <div class="field">
+          <label>Temperature</label>
+          <input type="number" step=".1" placeholder="°C">
+        </div>
+
+        <div class="field">
+          <label>Weight</label>
+          <input type="number" placeholder="kg">
+        </div>
+
+        <div class="field">
+          <label>Symptoms</label>
+          <input placeholder="Example: headache">
+        </div>
+
+        <button class="primary" onclick="showToast('Health reading saved')">
+          Save Reading
+        </button>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- MEDICINES -->
+  <section class="page" id="medicines">
+
+    <div class="card">
+      <div class="card-title">
+        <div>
+          <h2>💊 Medicine Management</h2>
+          <small>Set your own medicine schedule</small>
+        </div>
+        <button class="primary" onclick="addMedicine()">+ Add Medicine</button>
+      </div>
+
+      <div class="list" id="medicineList">
+
+        <div class="list-item">
+          <div class="list-left">
+            <div class="health-icon blue" style="margin:0">💊</div>
+            <div>
+              <b>Vitamin D</b>
+              <br><small>1 tablet · Morning</small>
+            </div>
+          </div>
+
+          <div>
+            <span class="badge">08:00 AM</span>
+            <button class="delete" onclick="removeItem(this)">×</button>
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="list-left">
+            <div class="health-icon purple" style="margin:0">💊</div>
+            <div>
+              <b>Medicine</b>
+              <br><small>1 tablet · Night</small>
+            </div>
+          </div>
+
+          <div>
+            <span class="badge">09:00 PM</span>
+            <button class="delete" onclick="removeItem(this)">×</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3>🔔 Voice Medicine Notifications</h3>
+      <p style="color:#7d8da5;margin:8px 0">
+        ALP can use browser notifications and speech synthesis when supported.
+      </p>
+
+      <button class="primary" onclick="enableNotifications()">
+        Enable Notifications
+      </button>
+    </div>
+
+  </section>
+
+  <!-- REPORTS -->
+  <section class="page" id="reports">
+
+    <div class="card">
+      <div class="card-title">
+        <div>
+          <h2>📁 Health Locker</h2>
+          <small>Your prescriptions and reports</small>
+        </div>
+
+        <label class="primary" style="display:inline-block">
+          + Upload
+          <input type="file" hidden="" onchange="uploadReport(this)">
+        </label>
+      </div>
+
+      <div class="list" id="reportList">
+
+        <div class="list-item">
+          <div>
+            <b>Blood Test Report</b>
+            <br><small>Added today</small>
+          </div>
+          <button class="secondary" onclick="showToast('Report preview opened')">View</button>
+        </div>
+
+        <div class="list-item">
+          <div>
+            <b>Prescription</b>
+            <br><small>Added 12 Sep</small>
+          </div>
+          <button class="secondary" onclick="showToast('Download started')">Download</button>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ROUTINE -->
+  <section class="page" id="routine">
+
+    <div class="grid grid-2">
+
+      <div class="card">
+        <div class="card-title">
+          <div>
+            <h2>🌸 Periods Routine</h2>
+            <small>Personal cycle notes</small>
+          </div>
+          <button class="primary" onclick="savePeriod()">Save</button>
+        </div>
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Last Period Date</label>
+            <input id="periodDate" type="date">
+          </div>
+
+          <div class="field">
+            <label>Cycle Length</label>
+            <input id="cycleLength" type="number" value="28">
+          </div>
+
+          <div class="field full">
+            <label>Period Notes</label>
+            <textarea id="periodNotes" placeholder="Symptoms, notes, reminders..."></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h3>🌿 Daily Routine</h3>
+          <button class="secondary" onclick="addRoutine()">+ Add</button>
+        </div>
+
+        <div class="list" id="routineList">
+          <div class="list-item">
+            <span>💧 Drink water</span>
+            <span class="badge">8:00 AM</span>
+          </div>
+          <div class="list-item">
+            <span>🚶 Exercise</span>
+            <span class="badge">6:00 PM</span>
+          </div>
+          <div class="list-item">
+            <span>😴 Sleep</span>
+            <span class="badge">10:30 PM</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- EMERGENCY -->
+  <section class="page" id="emergency">
+
+    <div class="card emergency">
+
+      <h2>🚨 Emergency Center</h2>
+      <p style="color:#8a6e73;margin:8px 0 20px">
+        For a real emergency, contact your local emergency service immediately.
+      </p>
+
+      <button class="emergency-button" onclick="emergencyCall()">
+        📞 Call Emergency Service
+      </button>
+
+    </div>
+
+    <div class="grid grid-3">
+
+      <div class="card">
+        <div class="health-icon pink">👨‍👩‍👧</div>
+        <h3>Emergency Contacts</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Your saved family and emergency contacts.
+        </p>
+        <button class="secondary" onclick="showToast('Emergency contact list opened')">
+          View Contacts
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="health-icon blue">🏥</div>
+        <h3>Nearby Hospital</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Find nearby hospitals using your device location.
+        </p>
+        <button class="primary" onclick="showPage('location')">
+          Find Hospital
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="health-icon green">🤖</div>
+        <h3>Emergency ALP</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Quickly access your emergency information.
+        </p>
+        <button class="primary" onclick="openALP()">
+          Ask ALP
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- LOCATION -->
+  <section class="page" id="location">
+
+    <div class="card">
+
+      <div class="card-title">
+        <div>
+          <h2>📍 Nearby Hospitals</h2>
+          <small>Location demonstration</small>
+        </div>
+
+        <button class="primary" onclick="getLocation()">
+          Use My Location
+        </button>
+      </div>
+
+      <div class="map">
+        <div class="road"></div>
+        <div class="location-pin"></div>
+      </div>
+
+      <p id="locationStatus" style="color:#7d8da5;margin-top:12px">
+        Location has not been requested.
+      </p>
+
+      <div class="list" style="margin-top:15px">
+
+        <div class="list-item">
+          <div>
+            <b>Nearby Hospital</b>
+            <br><small>Hospital location placeholder</small>
+          </div>
+          <button class="secondary" onclick="showToast('Directions feature ready')">
+            Directions
+          </button>
+        </div>
+
+        <div class="list-item">
+          <div>
+            <b>City Clinic</b>
+            <br><small>Clinic location placeholder</small>
+          </div>
+          <button class="secondary" onclick="showToast('Directions feature ready')">
+            Directions
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="page" id="settings">
+
+    <div class="card">
+
+      <div class="card-title">
+        <div>
+          <h2>⚙️ Settings</h2>
+          <small>Customize Dezen ALP</small>
+        </div>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Language</label>
+          <select id="language">
+            <option selected="selected">English</option>
+            <option>தமிழ் — Tamil</option>
+            <option>हिन्दी — Hindi</option>
+            <option>Español — Spanish</option>
+            <option>Français — French</option>
+            <option>Deutsch — German</option>
+            <option>Português — Portuguese</option>
+            <option>中文 — Chinese</option>
+            <option>한국어 — Korean</option>
+            <option>తెలుగు — Telugu</option>
+            <option>മലയാളം — Malayalam</option>
+            <option>ಕನ್ನಡ — Kannada</option>
+            <option>বাংলা — Bengali</option>
+            <option>मराठी — Marathi</option>
+            <option>ਪੰਜਾਬੀ — Punjabi</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Region</label>
+          <select>
+            <option selected="selected">India</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Appearance</label>
+          <select onchange="changeAppearance(this.value)">
+            <option value="light" selected="selected">Light</option>
+            <option value="soft">Soft Blue</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Notifications</label>
+          <select>
+            <option selected="selected">All Notifications</option>
+            <option>Medicine Only</option>
+            <option>Appointments Only</option>
+            <option>Off</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="grid grid-2">
+
+      <div class="card">
+        <h3>🔐 Privacy &amp; Security</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Manage your health information and security preferences.
+        </p>
+        <button class="secondary" onclick="showToast('Privacy settings opened')">
+          Manage Privacy
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>❓ Help &amp; Support</h3>
+        <p style="color:#7d8da5;margin:8px 0 15px">
+          Need help using Dezen ALP?
+        </p>
+        <button class="primary" onclick="openALP()">
+          Ask ALP
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>ℹ️ About Dezen ALP</h3>
+        <p style="color:#7d8da5;margin-top:8px">
+          Version 1.0 Prototype
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🚪 Account</h3>
+        <div style="display:flex;gap:10px;margin-top:15px">
+          <button class="secondary" onclick="showToast('Logout confirmation required')">
+            Logout
+          </button>
+          <button class="delete" onclick="showToast('Account deletion requires confirmation')">
+            Delete Account
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+</div>
+
+<!-- ALP FLOATING ASSISTANT -->
+<button class="alp" onclick="openALP()">
+  <strong>ALP</strong>
+  <small>🎙 Tap to talk</small>
+</button>
+
+<div class="alp-panel" id="alpPanel">
+
+  <div class="alp-head">
+    <div>
+      <b>🤖 ALP</b>
+      <br>
+      <small>Your health companion</small>
+    </div>
+
+    <button onclick="closeALP()" style="background:transparent">✕</button>
+  </div>
+
+  <div class="alp-chat" id="alpChat">
+
+    <div class="message alp-message">
+      Hi! I'm ALP. You can type or use your voice.
+    </div>
+
+  </div>
+
+  <div class="alp-input">
+    <input id="alpInput" placeholder="Ask ALP...">
+    <button class="secondary" onclick="startVoice()">🎙</button>
+    <button class="primary" onclick="sendALP()">➤</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+
+/* -------------------------
+   NAVIGATION
+------------------------- */
+
+function showPage(page,button){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document.getElementById(page).classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(button) button.classList.add("active");
+
+  document.getElementById("sidebar").classList.remove("open");
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+
+/* -------------------------
+   DATE
+------------------------- */
+
+const now = new Date();
+
+document.getElementById("dateText").textContent =
+  now.toLocaleDateString(undefined,{
+    weekday:"long",
+    month:"long",
+    day:"numeric"
+  });
+
+
+/* -------------------------
+   TOAST
+------------------------- */
+
+function showToast(message){
+
+  const toast=document.getElementById("toast");
+
+  toast.textContent=message;
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2500);
+}
+
+
+/* -------------------------
+   ALP
+------------------------- */
+
+function openALP(){
+  document.getElementById("alpPanel").classList.add("show");
+}
+
+function closeALP(){
+  document.getElementById("alpPanel").classList.remove("show");
+}
+
+function addALPMessage(text,user=false){
+
+  const chat=document.getElementById("alpChat");
+
+  const div=document.createElement("div");
+
+  div.className="message "+(user?"user-message":"alp-message");
+
+  div.textContent=text;
+
+  chat.appendChild(div);
+
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function sendALP(){
+
+  const input=document.getElementById("alpInput");
+
+  const text=input.value.trim();
+
+  if(!text)return;
+
+  addALPMessage(text,true);
+
+  input.value="";
+
+  setTimeout(()=>{
+
+    let reply =
+      "I can help you navigate Dezen ALP. For medical diagnosis or urgent symptoms, please contact an appropriate healthcare professional.";
+
+    const lower=text.toLowerCase();
+
+    if(lower.includes("medicine")){
+      reply="I can help you open the Medicine Management section and set a reminder time.";
+    }
+
+    if(lower.includes("appointment")){
+      reply="I can take you to Appointments so you can review your schedule.";
+    }
+
+    if(lower.includes("hospital")){
+      reply="I can open Nearby Hospitals and request your device location.";
+    }
+
+    if(lower.includes("profile")){
+      reply="Your health profile contains your personal health information and emergency contacts.";
+    }
+
+    addALPMessage(reply);
+
+    speak(reply);
+
+  },500);
+}
+
+
+/* -------------------------
+   BIG CHAT
+------------------------- */
+
+function sendChat(){
+
+  const input=document.getElementById("chatInput");
+
+  const text=input.value.trim();
+
+  if(!text)return;
+
+  const chat=document.getElementById("bigChat");
+
+  const user=document.createElement("div");
+
+  user.className="message user-message";
+  user.textContent=text;
+
+  chat.appendChild(user);
+
+  input.value="";
+
+  setTimeout(()=>{
+
+    const response=document.createElement("div");
+
+    response.className="message alp-message";
+
+    response.textContent=
+      "Thanks for sharing. I can help you organize your health information, medicines, appointments and routines.";
+
+    chat.appendChild(response);
+
+    chat.scrollTop=chat.scrollHeight;
+
+  },500);
+}
+
+
+/* -------------------------
+   VOICE ASSISTANT
+------------------------- */
+
+function speak(text){
+
+  if("speechSynthesis" in window){
+
+    const speech=new SpeechSynthesisUtterance(text);
+
+    speech.rate=.95;
+    speech.pitch=1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+  }
+}
+
+function startVoice(){
+
+  if(!("webkitSpeechRecognition" in window) &&
+     !("SpeechRecognition" in window)){
+
+    showToast("Voice recognition is not supported in this browser");
+
+    speak("Voice recognition is not supported in this browser.");
+
+    return;
+  }
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  const recognition=new Recognition();
+
+  recognition.lang="en-IN";
+  recognition.interimResults=false;
+  recognition.continuous=false;
+
+  openALP();
+
+  addALPMessage("🎙 Listening...");
+
+  recognition.start();
+
+  recognition.onresult=function(event){
+
+    const text=event.results[0][0].transcript;
+
+    document.getElementById("alpInput").value=text;
+
+    sendALP();
+  };
+
+  recognition.onerror=function(){
+
+    showToast("I couldn't hear that. Please try again.");
+  };
+}
+
+
+/* -------------------------
+   PROFILE
+------------------------- */
+
+function saveProfile(){
+
+  const name=document.getElementById("profileName").value || "Alex";
+
+  localStorage.setItem("dezenName",name);
+
+  document.getElementById("userName").textContent=name;
+
+  document.getElementById("avatar").textContent=name.charAt(0).toUpperCase();
+
+  showToast("Profile saved");
+}
+
+const savedName=localStorage.getItem("dezenName");
+
+if(savedName){
+
+  document.getElementById("userName").textContent=savedName;
+  document.getElementById("profileName").value=savedName;
+  document.getElementById("avatar").textContent=
+    savedName.charAt(0).toUpperCase();
+}
+
+
+/* -------------------------
+   DAILY NOTE
+------------------------- */
+
+function saveNote(){
+
+  const note=document.getElementById("dailyNote").value;
+
+  localStorage.setItem("dailyNote",note);
+
+  showToast("Daily note saved");
+}
+
+const savedNote=localStorage.getItem("dailyNote");
+
+if(savedNote)
+  document.getElementById("dailyNote").value=savedNote;
+
+
+/* -------------------------
+   MEDICINES
+------------------------- */
+
+function addMedicine(){
+
+  const name=prompt("Medicine name:");
+
+  if(!name)return;
+
+  const dosage=prompt("Dosage:", "1 tablet");
+
+  const time=prompt("Time:", "08:00 AM");
+
+  const list=document.getElementById("medicineList");
+
+  const item=document.createElement("div");
+
+  item.className="list-item";
+
+  item.innerHTML=`
+
+    <div class="list-left">
+
+      <div class="health-icon blue" style="margin:0">
+        💊
+      </div>
+
+      <div>
+        <b>${escapeHTML(name)}</b>
+        <br>
+        <small>${escapeHTML(dosage || "As prescribed")}</small>
+      </div>
+
+    </div>
+
+    <div>
+      <span class="badge">${escapeHTML(time || "Set time")}</span>
+      <button class="delete" onclick="removeItem(this)">×</button>
+    </div>
+
+  `;
+
+  list.appendChild(item);
+
+  showToast("Medicine reminder added");
+
+  scheduleBrowserNotification(name,time);
+}
+
+function removeItem(button){
+
+  button.closest(".list-item").remove();
+
+  showToast("Removed");
+}
+
+
+/* -------------------------
+   APPOINTMENTS
+------------------------- */
+
+function addAppointment(){
+
+  const doctor=prompt("Doctor / clinic:");
+
+  if(!doctor)return;
+
+  const date=prompt("Appointment date:");
+
+  const time=prompt("Appointment time:");
+
+  const list=document.getElementById("appointmentList");
+
+  const item=document.createElement("div");
+
+  item.className="list-item";
+
+  item.innerHTML=`
+
+    <div>
+      <b>${escapeHTML(doctor)}</b>
+      <br>
+      <small>Healthcare appointment</small>
+    </div>
+
+    <span class="badge">
+      ${escapeHTML(date || "Date")} · ${escapeHTML(time || "Time")}
+    </span>
+
+  `;
+
+  list.appendChild(item);
+
+  showToast("Appointment added");
+
+  scheduleBrowserNotification(
+    "Appointment: "+doctor,
+    time
+  );
+}
+
+
+/* -------------------------
+   PERIODS
+------------------------- */
+
+function savePeriod(){
+
+  const date=document.getElementById("periodDate").value;
+
+  localStorage.setItem("periodDate",date);
+
+  showToast("Period routine saved");
+}
+
+
+/* -------------------------
+   ROUTINES
+------------------------- */
+
+function addRoutine(){
+
+  const name=prompt("Routine name:");
+
+  if(!name)return;
+
+  const time=prompt("Routine time:");
+
+  const list=document.getElementById("routineList");
+
+  const item=document.createElement("div");
+
+  item.className="list-item";
+
+  item.innerHTML=`
+
+    <span>🌿 ${escapeHTML(name)}</span>
+
+    <span class="badge">
+      ${escapeHTML(time || "Set time")}
+    </span>
+
+  `;
+
+  list.appendChild(item);
+
+  showToast("Routine added");
+}
+
+
+/* -------------------------
+   REPORT UPLOAD
+------------------------- */
+
+function uploadReport(input){
+
+  if(!input.files.length)return;
+
+  const file=input.files[0];
+
+  const list=document.getElementById("reportList");
+
+  const item=document.createElement("div");
+
+  item.className="list-item";
+
+  item.innerHTML=`
+
+    <div>
+      <b>${escapeHTML(file.name)}</b>
+      <br>
+      <small>Uploaded just now</small>
+    </div>
+
+    <button class="secondary"
+      onclick="showToast('File selected: ${escapeHTML(file.name)}')">
+      View
+    </button>
+
+  `;
+
+  list.prepend(item);
+
+  showToast("Report added to Health Locker");
+}
+
+
+/* -------------------------
+   LOCATION
+------------------------- */
+
+function getLocation(){
+
+  const status=document.getElementById("locationStatus");
+
+  if(!navigator.geolocation){
+
+    status.textContent=
+      "Geolocation is not supported by this browser.";
+
+    return;
+  }
+
+  status.textContent="Requesting device location...";
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position){
+
+      status.textContent=
+        "Location received. Latitude: "+
+        position.coords.latitude.toFixed(5)+
+        " · Longitude: "+
+        position.coords.longitude.toFixed(5);
+
+      showToast("Location received");
+    },
+
+    function(){
+
+      status.textContent=
+        "Location permission was not granted.";
+    }
+  );
+}
+
+
+/* -------------------------
+   EMERGENCY
+------------------------- */
+
+function emergencyCall(){
+
+  /*
+    Replace this with your country's emergency
+    number only after confirming the correct
+    deployment region.
+  */
+
+  showToast(
+    "Connect this button to the appropriate local emergency service."
+  );
+}
+
+
+/* -------------------------
+   NOTIFICATIONS
+------------------------- */
+
+async function enableNotifications(){
+
+  if(!("Notification" in window)){
+
+    showToast("Browser notifications are unavailable");
+
+    return;
+  }
+
+  const permission=await Notification.requestPermission();
+
+  if(permission==="granted"){
+
+    new Notification("Dezen ALP",{
+      body:"Medicine and appointment notifications are enabled."
+    });
+
+    showToast("Notifications enabled");
+
+  }else{
+
+    showToast("Notification permission was not granted");
+  }
+}
+
+function scheduleBrowserNotification(name,time){
+
+  /*
+    Prototype reminder.
+    A production app should use native Android/iOS
+    notification scheduling or a backend service.
+  */
+
+  if("Notification" in window &&
+     Notification.permission==="granted"){
+
+    setTimeout(()=>{
+
+      new Notification("Dezen ALP Reminder",{
+        body:name+" reminder · "+time
+      });
+
+      speak(name+" reminder. It is time for your scheduled reminder.");
+
+    },5000);
+
+    showToast("Test notification scheduled");
+  }
+}
+
+
+/* -------------------------
+   APPEARANCE
+------------------------- */
+
+function changeAppearance(value){
+
+  if(value==="soft"){
+
+    document.documentElement.style.setProperty(
+      "--bg","#f0f8ff"
+    );
+
+  }else{
+
+    document.documentElement.style.setProperty(
+      "--bg","#f4fbff"
+    );
+  }
+
+  showToast("Appearance updated");
+}
+
+
+/* -------------------------
+   SECURITY
+------------------------- */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* -------------------------
+   ALP KEYBOARD
+------------------------- */
+
+document.getElementById("alpInput")
+  .addEventListener("keydown",function(e){
+
+    if(e.key==="Enter")
+      sendALP();
+
+  });
+
+document.getElementById("chatInput")
+  .addEventListener("keydown",function(e){
+
+    if(e.key==="Enter")
+      sendChat();
+
+  });
+
+
+/* -------------------------
+   PERIOD REMINDER LOAD
+------------------------- */
+
+const storedPeriod=
+  localStorage.getItem("periodDate");
+
+if(storedPeriod)
+  document.getElementById("periodDate").value=storedPeriod;
+
+</script>
+
+
+
+</body></html>
